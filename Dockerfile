@@ -14,7 +14,8 @@ RUN mkdir build; \
     cmake ../; \ 
     make && \
     make test && \
-    make install 
+    make install && \
+    ./srslte_install_configs.sh service
      
 CMD ["/bin/bash"]
 
