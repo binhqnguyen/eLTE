@@ -17,7 +17,6 @@
         group: centos
         mode: "0600"
         backup: yes
-      become: true
 
     - name: Clone eLTE code 
       git:
@@ -25,10 +24,9 @@
             dest: "{{elte_dest}}"
             accept_hostkey: yes
             key_file: "{{github_key}}"
-      become: true
     
-    #- name: Upgrade all packages
-    #  yum: name=* state=latest
+    - name: Upgrade all packages
+      yum: name=* state=latest
       
 
     - name: Check if Docker is installed
@@ -65,13 +63,7 @@
         masked: no
 
 
-    #- name: Clone eLTE code
-    #  shell: |
-    #    git clone "{{elte_source}}" "{{elte_dest}}"
-    #  become: true
-        
     - name: Build srsepc docker container
       make:
             chdir: "{{elte_dest}}"
             target: docker-build
-      become: true
