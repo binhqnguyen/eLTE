@@ -1,29 +1,17 @@
 ---
-#Usage: (venv) KAPAMACK0FHHTDG:eLTE p2780178$ ansible-playbook elte_playbook.yml -K -e github_key="~/.ssh/id_rsa"
+#Usage: (venv) KAPAMACK0FHHTDG:eLTE p2780178$ ansible-playbook elte_playbook.yml -K -e github_key="id_rsa"
 - name: Build and push srsepc docker in centos
   gather_facts: false
   hosts: bootstrap
   vars:
-    elte_source: git@github.com:binhqnguyen/eLTE.git
+    elte_source: https://github.com/binhqnguyen/eLTE.git
     elte_dest: /opt/eLTE
-    github_key: "{{github_key}}"
   become: true
   tasks:
-    - name: Copy github key
-      copy:
-        src: "{{github_key}}"
-        dest: "{{github_key}}"
-        owner: centos
-        group: centos
-        mode: "0600"
-        backup: yes
-
     - name: Clone eLTE code 
       git:
             repo: "{{elte_source}}"
             dest: "{{elte_dest}}"
-            accept_hostkey: yes
-            key_file: "{{github_key}}"
     
     - name: Upgrade all packages
       yum: name=* state=latest
