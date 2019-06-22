@@ -10,6 +10,10 @@ docker-build:
 	fi
 	docker build -t $(DOCKER_IMAGE) .
 
+.PHONY: docker-run
+docker-run:
+    sudo docker run --privileged --rm --name srsepc -dit $(DOCKER_IMAGE)   
+
 .PHONY: docker-push
 docker-push:
 	docker push $(DOCKER_IMAGE)
