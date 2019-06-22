@@ -55,3 +55,9 @@
       make:
             chdir: "{{elte_dest}}"
             target: docker-build
+    
+    - name: Run srsepc docker container
+      make:
+            chdir: "{{elte_dest}}"
+            target: docker-run
+ 
