@@ -12,7 +12,7 @@ docker-build:
 
 .PHONY: docker-run
 docker-run:
-    sudo docker run --privileged --rm --name srsepc -dit $(DOCKER_IMAGE)   
+	sudo docker run --privileged --rm --name srsepc -dit $(DOCKER_IMAGE)   
 
 .PHONY: docker-push
 docker-push:
