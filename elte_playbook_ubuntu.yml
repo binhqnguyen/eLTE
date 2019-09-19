@@ -1,0 +1,68 @@
+---
+#Usage: (venv) KAPAMACK0FHHTDG:eLTE p2780178$ ansible-playbook elte_playbook.yml -K -e github_key="id_rsa"
+- name: Build and push srsepc docker in ubuntu
+  gather_facts: false
+  hosts: bootstrap_ubuntu
+  vars:
+    elte_source: https://github.com/binhqnguyen/eLTE.git
+    elte_dest: /opt/eLTE
+  become: true
+  tasks:
+    - name: Upgrade all packages
+      apt: name=* state=latest
+ 
+    - name: Install git and make
+      apt:
+        name: git-core,build-essential
+        state: latest
+        update_cache: yes
+
+    - name: Clone eLTE code 
+      git:
+            repo: "{{elte_source}}"
+            dest: "{{elte_dest}}"
+
+    - name: Check if Docker is installed
+      command: systemctl status docker
+      register: docker_check
+      ignore_errors: yes
+
+    - name: Download the Docker installer
+      get_url:
+        url: https://get.docker.com/
+        dest: /root/install_docker.sh
+        mode: 0700
+      when: docker_check.stderr.find('service could not be found') != -1
+
+    - name: Install Docker
+      shell: /root/install_docker.sh
+      when: docker_check.stderr.find('service could not be found') != -1
+
+    - name: Remove the Docker installer file.
+      file:
+        state: absent
+        path: /root/install_docker.sh
+
+    - name: Enable the Docker daemon in systemd
+      systemd:
+        name: docker
+        enabled: yes
+        masked: no
+
+    - name: Start the Docker daemon
+      systemd:
+        name: docker
+        state: started
+        masked: no
+
+
+    - name: Build srsepc docker container
+      make:
+            chdir: "{{elte_dest}}"
+            target: docker-build
+    
+    - name: Run srsepc docker container
+      make:
+            chdir: "{{elte_dest}}"
+            target: docker-run
+ 

@@ -2,7 +2,7 @@
 #Usage: (venv) KAPAMACK0FHHTDG:eLTE p2780178$ ansible-playbook elte_playbook.yml -K -e github_key="id_rsa"
 - name: Build and push srsepc docker in centos
   gather_facts: false
-  hosts: bootstrap
+  hosts: bootstrap_centos
   vars:
     elte_source: https://github.com/binhqnguyen/eLTE.git
     elte_dest: /opt/eLTE

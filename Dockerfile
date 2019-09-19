@@ -17,5 +17,5 @@ RUN mkdir build; \
     make install && \
     ./srslte_install_configs.sh service
      
-CMD ["/bin/bash", "srsepc"]
+CMD ["srsepc"]
 
