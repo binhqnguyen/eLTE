@@ -17,6 +17,11 @@
         state: latest
         update_cache: yes
 
+    - name: Remove existing eLTE code if any
+      file: 
+        path: "{{elte_dest}}"
+        state: absent
+
     - name: Clone eLTE code 
       git:
             repo: "{{elte_source}}"
